@@ -139,12 +139,42 @@ SHOW COLUMNS FROM table_name: 显示数据表的属性，属性类型，主键�
 
 INSERT [INTO] table_name [(col_name,...)] VALUES(val,...);
 
+
+SHOW INDEX FROM 数据表: 显示数据表的详细索引信息，包括PRIMARY KEY（主键）。
+
+SHOW TABLE STATUS LIKE 数据表\G: 该命令将输出MySQL数据库管理系统的性能及统计信息。
+
+查看数据表：
+SELECT expr,... FROM table_name;
+
+NULL and NOT NULL:
+CREATE TABLE tb2(
+   -> username VARCHAR(20) NOT NULL,
+   -> age TINYINT UNSIGNED NULL
+   -> );
+
+
+查看数据结构：
+SHOW COLUMNS FROM table_name;
+
+主键PRIMARY KEY：
+a.主键约束.
+b.每张表只能有一个主键.
+c.主键自动为NOT NULL.
+d.主键保证记录的唯一性.
+
+AUTO_INCREMENT:
+CREATE TABLE tb3(
+	 id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+	 username VARCHAR(30) NOT NULL 
+	 );
+
 -----------------------------------------------------
 -----------------------------------------------------
 -----------------------------------------------------
 -----------------------------------------------------
 leaning to this:
-与MySQL的零距离接触>>MySQL记录的插入与查找-慕课网
+与MySQL的零距离接触>>MySQL初涉主键约束-慕课网
 -----------------------------------------------------
 -----------------------------------------------------
 -----------------------------------------------------
@@ -153,8 +183,3 @@ leaning to this:
 -----------------------------------------------------
 -----------------------------------------------------
 -----------------------------------------------------
-
-
-SHOW INDEX FROM 数据表: 显示数据表的详细索引信息，包括PRIMARY KEY（主键）。
-
-SHOW TABLE STATUS LIKE 数据表\G: 该命令将输出MySQL数据库管理系统的性能及统计信息。
