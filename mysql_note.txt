@@ -126,6 +126,9 @@ CREATE TABLE [IF NOT EXITS] table_name(
 	......
 ) engine=table_type;
 
+
+查看创建数据库时:SHOW CREATE TABLE table_name;
+
 PS:
 MariaDB [king]> CREATE TABLE user(
     -> username VARCHAR(20),
@@ -169,12 +172,72 @@ CREATE TABLE tb3(
 	 username VARCHAR(30) NOT NULL 
 	 );
 
+
+UNIQUE KEY:
+a.唯一约束.
+b.唯一约束可以保证记录的唯一性.
+c.唯一约束的字段可以为空值
+d.每张表可以存在多个唯一约束
+CREATE TABLE tb5(
+   -> id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+   -> username VARCHAR(20) NOT NULL UNIQUE KEY,
+   -> age TINYINT UNSIGNED
+   -> );
+
+
+DEFAULT值:
+CREATE TABLE tb6(
+    -> id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    -> username VARCHAR(20) NOT NULL UNIQUE KEY,
+    -> sex ENUM('1','2','3') DEFAULT '3'
+    -> );
+
+FOREIGN KEY(外键约束):
+1.保持数据一致性，完整性。
+2.实现一对一或一对多关系。
+
+
+外键约束的要求：
+1.父表和子表必须使用相同的存储引擎，而且禁止使用临时表。
+2.数据表的存储引擎只能为InnoDB.
+3.外键列和参照列必须具有相似的数据类型。其中数字的长度或是有符号位必须相同；而字符的长度则可以不同。
+4.外键列和参照列必须创建索引。如果外键列不存在索引的话，MySQL将自动创建索引。
+
+MariaDB [king]> CREATE TABLE provinces(
+    -> id SMALLINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    -> pname VARCHAR(20) NOT NULL
+    -> );
+
+MariaDB [king]> CREATE TABLE users(
+    -> id SMALLINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    -> username VARCHAR(10) NOT NULL,
+    -> pid SMALLINT UNSIGNED,
+    -> FOREIGN KEY (pid) REFERENCES provinces (id)
+    -> );
+
+
+
+查看索引:MariaDB [king]> show indexes from table_name\G;
+
+编辑数据表的默认存储引擎
+MySQL配直文件(my.ini)>>default-storage-engine=INNODB
+
+
+约束:
+1.约束保证数据的完整性和一致性。
+2.约束分为表级约束和列级约束。
+3.约束类型包括：
+	NOT NULL(非空约束)
+	PRIMARY KEY(主键约束)
+	UNIQUE KYE(唯一约束)
+	DEFAULT(默认约束)
+	FOREIGN KEY(外键约束)
 -----------------------------------------------------
 -----------------------------------------------------
 -----------------------------------------------------
 -----------------------------------------------------
 leaning to this:
-与MySQL的零距离接触>>MySQL初涉主键约束-慕课网
+MySQL 外键约束的要求解析-慕课网
 -----------------------------------------------------
 -----------------------------------------------------
 -----------------------------------------------------
