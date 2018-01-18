@@ -160,6 +160,7 @@ CREATE TABLE tb2(
 查看数据结构：
 SHOW COLUMNS FROM table_name;
 
+[约束]
 主键PRIMARY KEY：
 a.主键约束.
 b.每张表只能有一个主键.
@@ -234,17 +235,59 @@ MySQL配直文件(my.ini)>>default-storage-engine=INNODB
 	FOREIGN KEY(外键约束)
 
 
-外键约束的参数：
-1.CASCADE:从父表删除或更新且自动删除或更新子表中匹配的行。
+外键约束的参数(数据表必须为INNODB)：
+1.CASCADE:从父表删除或更新且自动删除或更新子表中匹配的行。(同步删除或更新，ps:删除文章时，对应的文章评论也会同步删除)
 2.SET NULL：从父表删除或更新行，并设置子表中的外键列为NULL。如果使用该选项，必须保证子表列没有指定NOT NULL。
 3.RESTRICT：拒对父表的删除或更新操作。
 4.NO ACTION：标准SQL的关键字，在MySQL中与RESTRICT相同。
+
+
+MariaDB [king]> CREATE TABLE users1(
+    -> id SMALLINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    -> username VARCHAR(10) NOT NULL,
+    -> pid SMALLINT UNSIGNED,
+    -> FOREIGN KEY (pid) REFERENCES provinces (id) ON DELETE CASCADE
+    -> );
+
+
+表级约束与列级约束
+1.对一个数据列建立的约束，称为列级约束。
+2.对多个数据列建立的约束，称为表级约束。
+3.列级约束既可以在列定义的时声明，也可以在列定义后声明。表级约束只能在列定义后声明。
+
+[修改数据表]
+添加单列：
+ALTER TABLE table_name ADD [COLUMN] col_name column_definition [FIRST | AFTER col_name]; 
+
+添加多列：ALTER TABLE table_name ADD [COLUMN] (col_name column_defination,...);
+
+删除列：
+ALTER TABLE table_name DROP [COLUMN] col_name;
+
+删除多列：
+ALTER TABLE table_name DROP [COLUMN] col_name1，col_name2,...;
+
+添加主键约束：
+ALTER TABLE table_name ADD [CONSTRAINT [symbol]] PRIMARY KEY [index_type](index_col_name,...);
+ps:MariaDB [king]> ALTER TABLE users2 ADD CONSTRAINT PK_users2_id PRIMARY KEY(id);
+
+添加唯一约束：
+ALTER TABLE table_name ADD [CONSTRAINT [symbol]] UNIQUE [INDEX|key][index_name] [index_type] (index_col_name,...);
+ps:MariaDB [king]> ALTER TABLE users2 ADD UNIQUE (username);
+
+添加外键约束：
+ALTER TABLE table_name ADD [CONSTRAINT [symbol]] FOREIGN KEY [index_name] (index_col_name,...) reference_defination;
+ps:MariaDB [king]> ALTER TABLE users2 ADD FOREIGN KEY (pid) REFERENCES provinces(id);
+
+添加／删除默认约束：
+ALTER TABLE table_name ALTER [COLUMN] col_name {SET DEFAULT literal | DROP DEFAULT}
+PS:MariaDB [king]> ALTER TABLE users2 ALTER age SET DEFAULT 22;
 -----------------------------------------------------
 -----------------------------------------------------
 -----------------------------------------------------
 -----------------------------------------------------
 leaning to this:
-MySQL 外键约束的参照操作，与MySQL的零距离接触教程-慕课网
+MySQL 修改数据表--删除约束，与MySQL的零距离接触教程-慕课网
 -----------------------------------------------------
 -----------------------------------------------------
 -----------------------------------------------------
