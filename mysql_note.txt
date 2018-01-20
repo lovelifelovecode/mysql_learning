@@ -335,6 +335,8 @@ ps:
 
 插入记录方法3：
 INSERT 「INTO」 table_name [(col_name,...)] SELECT ...;
+ps:
+MariaDB [king]> INSERT INTO test(username) SELECT username FROM users WHERE age >=20;(插入从第二个表中查询出的数据。）
 
 更改记录(UPDATE)
 单表更新：
@@ -377,6 +379,25 @@ MariaDB [king]> select id,username AS uname from users;
 [GROUP BY {col_name | positioin} [ASC|DESC],...];
 ps:
 MariaDB [king]> select sex from users group by sex;
+
+分组条件(HAVING):
+[HAVING where_condition]
+ps:
+MariaDB [king]> SELECT sex,age FROM users GROUP BY sex HAVING age > 20;
+MariaDB [king]> SELECT sex,age FROM users GROUP BY sex HAVING count(id) >= 3;
+
+查询排序：
+[ORDER BY {col_name | expr | position} [ASC|DESC],...];
+PS:
+MariaDB [king]> SELECT * FROM users ORDER BY id DESC;
+MariaDB [king]> SELECT * FROM users ORDER BY age ASC,id DESC;
+
+
+限制数量：
+[LIMIT {[offset,] row_count | row_count OFFSET offset}];
+PS:
+MariaDB [king]> SELECT * FROM users LIMIT 2;
+MariaDB [king]> SELECT * FROM users LIMIT 2,4;(注：从下标为2的数据开始，取4条数据。数据表下标从0开始。）
 
 -----------------------------------------------------
 -----------------------------------------------------
