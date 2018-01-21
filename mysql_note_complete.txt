@@ -10,6 +10,10 @@
 a.Not logged in:#mysql -V
 b.Is logged in:#SELECT VERSION();
 
+客户端输出乱码：SET NAMES GBK;
+
+修改mysql密码为1234：SET PASSWORD＝PASSWORD('1234');
+
 MySQL 用户设置>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 如果你需要添加 MySQL 用户，你只需要在 MySQL 数据库中的 user 表添加新用户即可。
@@ -401,6 +405,70 @@ MariaDB [king]> SELECT * FROM users LIMIT 2,4;(注：从下标为2的数据开�
 
 
 [子查询」
+
+数据>>>>>>>>>>>>>>>>>>>
+  -- 创建数据表
+
+  CREATE TABLE IF NOT EXISTS tdb_goods(
+    goods_id    SMALLINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    goods_name  VARCHAR(150) NOT NULL,
+    goods_cate  VARCHAR(40)  NOT NULL,
+    brand_name  VARCHAR(40)  NOT NULL,
+    goods_price DECIMAL(15,3) UNSIGNED NOT NULL DEFAULT 0,
+    is_show     BOOLEAN NOT NULL DEFAULT 1,
+    is_saleoff  BOOLEAN NOT NULL DEFAULT 0
+  );
+
+ -- 写入记录
+
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('R510VC 15.6英寸笔记本','笔记本','华硕','3399',DEFAULT,DEFAULT);
+ 
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('Y400N 14.0英寸笔记本电脑','笔记本','联想','4899',DEFAULT,DEFAULT);
+ 
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('G150TH 15.6英寸游戏本','游戏本','雷神','8499',DEFAULT,DEFAULT);
+ 
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('X550CC 15.6英寸笔记本','笔记本','华硕','2799',DEFAULT,DEFAULT);
+ 
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('X240(20ALA0EYCD) 12.5英寸超极本','超级本','联想','4999',DEFAULT,DEFAULT);
+ 
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('U330P 13.3英寸超极本','超级本','联想','4299',DEFAULT,DEFAULT);
+ 
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('SVP13226SCB 13.3英寸触控超极本','超级本','索尼','7999',DEFAULT,DEFAULT);
+ 
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('iPad mini MD531CH/A 7.9英寸平板电脑','平板电脑','苹果','1998',DEFAULT,DEFAULT);
+ 
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('iPad Air MD788CH/A 9.7英寸平板电脑 （16G WiFi版）','平板电脑','苹果','3388',DEFAULT,DEFAULT);
+ 
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES(' iPad mini ME279CH/A 配备 Retina 显示屏 7.9英寸平板电脑 （16G WiFi版）','平板电脑','苹果','2788',DEFAULT,DEFAULT);
+ 
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('IdeaCentre C340 20英寸一体电脑 ','台式机','联想','3499',DEFAULT,DEFAULT);
+ 
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('Vostro 3800-R1206 台式电脑','台式机','戴尔','2899',DEFAULT,DEFAULT);
+ 
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('iMac ME086CH/A 21.5英寸一体电脑','台式机','苹果','9188',DEFAULT,DEFAULT);
+ 
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('AT7-7414LP 台式电脑 （i5-3450四核 4G 500G 2G独显 DVD 键鼠 Linux ）','台式机','宏碁','3699',DEFAULT,DEFAULT);
+ 
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('Z220SFF F4F06PA工作站','服务器/工作站','惠普','4288',DEFAULT,DEFAULT);
+ 
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('PowerEdge T110 II服务器','服务器/工作站','戴尔','5388',DEFAULT,DEFAULT);
+ 
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('Mac Pro MD878CH/A 专业级台式电脑','服务器/工作站','苹果','28888',DEFAULT,DEFAULT);
+ 
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES(' HMZ-T3W 头戴显示设备','笔记本配件','索尼','6999',DEFAULT,DEFAULT);
+
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('商务双肩背包','笔记本配件','索尼','99',DEFAULT,DEFAULT);
+
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('X3250 M4机架式服务器 2583i14','服务器/工作站','IBM','6888',DEFAULT,DEFAULT);
+ 
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('玄龙精英版 笔记本散热器','笔记本配件','九州风神','',DEFAULT,DEFAULT);
+
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES(' HMZ-T3W 头戴显示设备','笔记本配件','索尼','6999',DEFAULT,DEFAULT);
+
+ INSERT tdb_goods (goods_name,goods_cate,brand_name,goods_price,is_show,is_saleoff) VALUES('商务双肩背包','笔记本配件','索尼','99',DEFAULT,DEFAULT);
+数据<<<<<<<<<<<<<<<<<<<<
+
+
 子查询是指在另一个查询语句中的SELECT子句。
 
 例句：SELECT * FROM t1 WHERE column1 = (SELECT column1 FROM t2);
@@ -409,6 +477,265 @@ SELECT column1 FROM t2 称为Sub Query[子查询]。
 
 所以，我们说子查询是嵌套在外查询内部。而事实上它有可能在子查询内部再嵌套子查询。
 子查询必须出现在圆括号之间。
+
+使用比较运算符的子查询：＝、>、<、>=、<=、<>、!=、<=>
+语法结构：
+operand comparison_operator subquery
+ps:
+MariaDB [king]> SELECT * FROM tdb_goods WHERE goods_price >= (SELECT AVG(goods_price) FROM tdb_goods);
+
+子查询的修饰：ANY，SOM，ALL关键字
+当子查询返回的行数大于一条时，要用修饰词修饰。
+ANY和SOME的意义用法一样，都是满足其中一个条件即可，ALL是要满足所有条件。
+MariaDB [king]> SELECT *  FROM tdb_goods WHERE goods_price >= all(SELECT goods_price FROM tdb_goods WHERE goods_cate = '超级本');
+
+
+使用[NOT] IN 的子查询：
+语法结构：
+operand comparison_operator [NOT] IN(subquery);
+=ANY 运算符与IN等效.
+!=ALL或<>ALL运算符与NOT IN 等效。
+PS：
+MariaDB [king]> SELECT *  FROM tdb_goods WHERE goods_price IN(SELECT goods_price FROM tdb_goods WHERE goods_cate = '超级本');
+
+使用[NOT] EXISTS的子查询：
+如果子查询返回任何行，EXISTS将返回TRUE；否则为FALSE；
+
+MariaDB [king]> CREATE TABLE IF NOT EXISTS tdb_goods_cates(
+    -> cate_id SMALLINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    -> cate_name VARCHAR(40) NOT NULL
+    -> );
+
+MariaDB [king]> SELECT goods_cate FROM tdb_goods_cates GROUP BY goods_cate;
+
+MariaDB [king]> INSERT INTO tdb_goods_cates(cate_name) SELECT goods_cate FROM tdb_goods GROUP BY goods_cate;
+
+
+多表更新：
+UPDATE table_references SET col_name1={expr1|DEFAULT} 
+[,col_name2={expr2|DEFAULT}]...
+[WHERE where_condition];
+
+PS:重点：根据另外的表更新本表的记录，不用人工去一个一个修改。
+MariaDB [king]> UPDATE tdb_goods INNER JOIN tdb_goods_cates ON goods_cate = cate_name SET goods_cate = cate_id;
+
+
+CREATE...SELECT
+创建数据表同时将查询结果写入到数据表
+CREATE TABLE [IF NOT EXISTS] table_name [(create_definition,...)] select_statement;
+PS:(创建数据表同时将查询结果写入到数据表)
+MariaDB [king]> CREATE TABLE tdb_goods_brands(
+    -> brand_id SMALLINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    -> brand_name VARCHAR(40) NOT NULL
+    -> )
+    -> SELECT brand_name FROM tdb_goods GROUP BY brand_name;
+
+MariaDB [king]> UPDATE tdb_goods INNER JOIN tdb_goods_brands ON tdb_goods.brand_name = tdb_goods_brands.brand_name 
+    -> SET tdb_goods.brand_name = brand_id;
+
+
+[连接]
+table_reference {[INNER|CROSS] JOIN |{LEFT|RIGHT} [OUTER] JOIN } table_reference ON conditional_expr;
+
+JOIN,CROSS JOIN 和 INNER JOIN是等价。
+LEFT [OUTER] JOIN,左连接。
+RIGHT [OUTER] JOIN 右连接
+
+连接条件：
+使用ON关键字来设定连接条件，也可以使用WHERE来替换。
+通常用ON关键字来设定连接条件，
+使用WHERE关键字进行结果集记录的过滤。
+PS:
+MariaDB [king]> SELECT goods_id,goods_name,cate_name FROM tdb_goods AS G INNER JOIN tdb_goods_cates AS C ON G.cate_id = C.cate_id;
+
+MariaDB [king]> SELECT goods_id,goods_name,cate_name FROM tdb_goods AS G LEFT JOIN tdb_goods_cates AS C ON G.cate_id = C.cate_id;
+
+MariaDB [king]> SELECT goods_id,goods_name,cate_name FROM tdb_goods AS G RIGHT JOIN tdb_goods_cates AS C ON G.cate_id = C.cate_id\G;
+
+自身连接：同一个数据表对其自身进行连接。
+-- 无限分类的数据表设计
+
+   CREATE TABLE tdb_goods_types(
+     type_id   SMALLINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+     type_name VARCHAR(20) NOT NULL,
+     parent_id SMALLINT UNSIGNED NOT NULL DEFAULT 0
+  ); 
+
+  INSERT tdb_goods_types(type_name,parent_id) VALUES('家用电器',DEFAULT);
+  INSERT tdb_goods_types(type_name,parent_id) VALUES('电脑、办公',DEFAULT);
+  INSERT tdb_goods_types(type_name,parent_id) VALUES('大家电',1);
+  INSERT tdb_goods_types(type_name,parent_id) VALUES('生活电器',1);
+  INSERT tdb_goods_types(type_name,parent_id) VALUES('平板电视',3);
+  INSERT tdb_goods_types(type_name,parent_id) VALUES('空调',3);
+  INSERT tdb_goods_types(type_name,parent_id) VALUES('电风扇',4);
+  INSERT tdb_goods_types(type_name,parent_id) VALUES('饮水机',4);
+  INSERT tdb_goods_types(type_name,parent_id) VALUES('电脑整机',2);
+  INSERT tdb_goods_types(type_name,parent_id) VALUES('电脑配件',2);
+  INSERT tdb_goods_types(type_name,parent_id) VALUES('笔记本',9);
+  INSERT tdb_goods_types(type_name,parent_id) VALUES('超级本',9);
+  INSERT tdb_goods_types(type_name,parent_id) VALUES('游戏本',9);
+  INSERT tdb_goods_types(type_name,parent_id) VALUES('CPU',10);
+  INSERT tdb_goods_types(type_name,parent_id) VALUES('主机',10);
+
+PS:
+MariaDB [king]> SELECT s.type_id,s.type_name,p.type_name FROM tdb_goods_types AS s LEFT JOIN tdb_goods_types AS p
+    -> ON  s.parent_id = p.type_id;
+
+注意与上面一条的区别：
+MariaDB [king]> SELECT s.type_id,s.type_name,p.type_name FROM tdb_goods_types AS s LEFT JOIN tdb_goods_types AS p
+    -> ON p.parent_id = s.type_id;
+
+MariaDB [king]> SELECT s.type_id,s.type_name,COUNT(p.type_name) FROM tdb_goods_types AS s LEFT JOIN tdb_goods_types AS p ON p.parent_id = s.type_id GROUP BY s.type_name ORDER BY type_id ASC;
+
+
+多表删除：
+DELETE table_name [.*] [,table[.*]]...
+FROM table_references [WHERE where_condition];
+
+-- 查找重复记录
+  SELECT goods_id,goods_name FROM tdb_goods GROUP BY goods_name HAVING count(goods_name) >= 2;
+
+-- 删除重复记录
+  DELETE t1 FROM tdb_goods AS t1 LEFT JOIN (SELECT goods_id,goods_name FROM tdb_goods GROUP BY goods_name HAVING count(goods_name) >= 2 ) AS t2  ON t1.goods_name = t2.goods_name  WHERE t1.goods_id > t2.goods_id;
+
+[函数]
+
+字符函数：
+CONCAT() 字符连接
+CONCAT_WS() 使用指定的分隔符进行字符连接
+FORMAT() 数字格式化(返回的结果是字符型）
+LOWER() 转换成小写字母
+UPPER() 转换成大写字母
+LEFT()  获取左侧字符
+RIGHT() 获取右侧字符
+LENGTH()    获取字符串长度
+LIRIM() 删除前导空格
+RTRIM() 删除后续空格
+TRIM() 删除前导和后续空格
+SUBSTRING()  字符串截取
+[NOT] LIKE 模式匹配
+REPLACE()   字符串替换
+
+PS:
+MariaDB [king]> SELECT CONCAT('Hellow','World');
+MariaDB [king]> SELECT CONCAT('Hellow','_','World');
+MariaDB [king]> SELECT CONCAT(first_name,last_name) AS fullname FROM test;
+MariaDB [king]> SELECT CONCAT_WS('|','XIAO','JING','GOOD');
+MariaDB [king]> SELECT FORMAT(123456.78,2);
+MariaDB [king]> SELECT LOWER('hAINing');
+MariaDB [king]> SELECT UPPER('hAINing');
+MariaDB [king]> SELECT LEFT('xiaojing',2);
+MariaDB [king]> SELECT UPPER(RIGHT('xiaojing',3));
+MariaDB [king]> SELECT LENGTH('XIAOJING');
+MariaDB [king]> SELECT LENGTH(LTRIM(' xiaojing'));
+MariaDB [king]> SELECT LENGTH(RTRIM('xiaojing   '));
+MariaDB [king]> SELECT LENGTH(TRIM('  xiaojing   '));
+MariaDB [king]> SELECT TRIM(LEADING '?' FROM '??mysql???');
+MariaDB [king]> SELECT TRIM(TRAILING '?' FROM '??mysql???');
+MariaDB [king]> SELECT TRIM(BOTH '?' FROM '??mysql???');
+MariaDB [king]> SELECT REPLACE('**MY*SQL***','*','!');
+MariaDB [king]> SELECT SUBSTRING('MySQL',3,2);
+MariaDB [king]> SELECT * FROM test WHERE first_name LIKE '%ao%';
+MariaDB [king]> SELECT * FROM test WHERE first_name LIKE '%1%%' ESCAPE '1';(查找含有百分号的first_name字段)
+
+%百分号，任意个字符
+_下划线，任意一个字符
+
+数值运算符：
+CEIL()  进一取整
+DIV 整数除法
+FLOOR() 舍一取整
+MOD 取余数(取模）
+POWER() 幂运算 
+ROUND() 四舍五入
+TRUNCATE()  数字截取
+
+ps:
+MariaDB [king]> SELECT 3+2;
+MariaDB [king]> SELECT CEIL(3.2);
+MariaDB [king]> SELECT FLOOR(3.9);
+MariaDB [king]> SELECT 3/4;
+MariaDB [king]> SELECT 3 DIV 4;
+MariaDB [king]> SELECT 6 DIV 3;
+MariaDB [king]> SELECT 5%3;
+MariaDB [king]> SELECT 5 MOD 3;
+MariaDB [king]> SELECT POWER(2,3);
+MariaDB [king]> SELECT ROUND(3.2);
+MariaDB [king]> SELECT ROUND(3.7);
+MariaDB [king]> SELECT ROUND(3.652,2);
+MariaDB [king]> SELECT ROUND(3.652,1);
+MariaDB [king]> SELECT ROUND(3.652,0);
+MariaDB [king]> SELECT TRUNCATE(125.89,1);
+MariaDB [king]> SELECT TRUNCATE(125.89,0);
+
+
+比较运算符：
+[NOT] BETWEEN...AND... [不]在范围之内
+[NOT] IN()  [不]在列出值范围内
+IS [NOT]NULL    [不]为空
+
+PS:
+MariaDB [king]> SELECT 10 BETWEEN 1 AND 20;
+MariaDB [king]> SELECT 10 BETWEEN 1 AND 2;
+MariaDB [king]> SELECT 10 IN(10,20,30);
+MariaDB [king]> SELECT 17 IN(10,20,30);
+MariaDB [king]> SELECT * FROM test WHERE first_name IS NULL;
+
+
+日期时间函数：
+NOW()   当前日期和时间
+CURDATE()   当前日期
+CURTIME()   当前时间
+DATE_ADD()  日期变化
+DATEDIFF()  日期差值
+DATE_FORMAT()   日期格式化
+ps:
+MariaDB [king]> SELECT NOW();
+MariaDB [king]> SELECT CURDATE();
+MariaDB [king]> SELECT CURTIME();
+MariaDB [king]> SELECT DATE_ADD('2014-3-12',INTERVAL 365 DAY);
+MariaDB [king]> SELECT DATE_ADD('2014-3-12',INTERVAL -365 DAY);
+MariaDB [king]> SELECT DATE_ADD('2014-3-12',INTERVAL 1 YEAR);
+MariMariaDB [king]> SELECT DATEDIFF('2013-3-12','2014-3-12');
+MariMariaDB [king]> SELECT DATE_ADD('2014-3-12',INTERVAL 3 WEEK);
+MariaDB [king]> SELECT DATE_FORMAT('2014-3-12','%m/%d/%Y');
+
+
+
+信息函数：
+CONNECTION_ID()  连接ID
+DATABASE() 当前数据库
+LAST_INSERT_ID() 最后插入记录的ID号.(但如果同时插入多条记录，只能输出第一条插入的ID）
+USER() 当前用户
+VSERSION() 版本信息
+PS:
+MariaDB [king]> SELECT CONNECTION_ID();
+MariaDB [king]> SELECT DATABASE();
+MariaDB [king]> SELECT LAST_INSERT_ID();
+MariaDB [king]> SELECT USER();
+MariaDB [king]> SELECT VERSION();
+
+
+
+聚合函数：
+AVG() 平均值
+COUNT() 计数
+MAX() 最大值
+MIN() 最小值
+SUM() 求值
+ps:
+MariaDB [king]> SELECT AVG(id) FROM test;
+MariaDB [king]> SELECT COUNT(id) FROM test;
+MariaDB [king]> SELECT MAX(id) FROM test;
+MariaDB [king]> SELECT MIN(id) FROM test;
+MariaDB [king]> SELECT SUM(id) FROM test;
+
+
+加密函数：
+MD5() 信息摘要算法
+PASSWORD() 密码算法
+ps:
+MariaDB [king]> SELECT MD5('123456');
 
 -----------------------------------------------------
 -----------------------------------------------------
