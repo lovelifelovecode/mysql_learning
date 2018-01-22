@@ -737,6 +737,37 @@ PASSWORD() 密码算法
 ps:
 MariaDB [king]> SELECT MD5('123456');
 
+[自定义函数]
+CREATE FUNCTION function_name
+RET URNS
+{STRING|INTEGER|REAL|DECIMAL}
+routine_body;
+PS:
+MariaDB [king]> CREATE FUNCTION  f1() RETURNS VARCHAR(30)
+    -> RETURN DATE_FORMAT(NOW(),'%Y/%m/%d');
+
+MariaDB [king]> CREATE FUNCTION f2(num1 SMALLINT UNSIGNED,num2 SMALLINT UNSIGNED)
+    -> RETURNS FLOAT(10,2) UNSIGNED
+    -> RETURN (num1+num2)/2;
+
+创建具有复合结构函数体的自定义函数
+修改语句结束符为$$:
+MariaDB [king]> DELIMITER $$
+MariaDB [king]> CREATE FUNCTION adduser(username VARCHAR(20))
+    -> RETURNS INT UNSIGNED
+    -> BEGIN
+    -> INSERT test(username) VALUES(username);
+    -> RETURN LAST_INSERT_ID();
+    -> END
+    -> $$
+
+
+//查看自定义函数
+SHOW FUCNTION STATUS LIKE 'function_name';
+SHOW  CREATE FUNCTION function_name;
+
+//删除自定义函数
+DROP FUNCTION [IF EXISTS] function_name;
 -----------------------------------------------------
 -----------------------------------------------------
 -----------------------------------------------------
