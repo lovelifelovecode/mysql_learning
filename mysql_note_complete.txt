@@ -14,6 +14,8 @@ b.Is logged in:#SELECT VERSION();
 
 修改mysql密码为1234：SET PASSWORD＝PASSWORD('1234');
 
+SELECT ROW_COUNT();//获取上一次被影响的行数。
+
 MySQL 用户设置>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 如果你需要添加 MySQL 用户，你只需要在 MySQL 数据库中的 user 表添加新用户即可。
@@ -768,6 +770,81 @@ SHOW  CREATE FUNCTION function_name;
 
 //删除自定义函数
 DROP FUNCTION [IF EXISTS] function_name;
+
+
+[存储过程]
+1.增强SQL语句的功能和灵活性。
+2.实现较快的执行速度。
+3.减小网络流量。
+
+CREATE
+[DEFINER = {user|CURRENT_USER}]
+PROCEDURE sp_name ([proc_parameter[,...]])
+[characteristic ...] routine_body;
+
+proc_parameter:
+[IN|OUT|INOUT] param_name type;
+IN表示该参数的值必须在调用存储过程时指定。
+OUT表示该参数的值可以被存储过程改变，并且可以返回。
+INOUT表示该参数的调用时指定，并且可以被改变和返回。
+
+a.过程体由合法的SQL语句构成；
+b.过程体可以是任意SQL语句；
+c.过程体如果为复合结构则使用DEGIN...END语名；
+d.复合结构可以包含声明，循环，控制结构；
+ps:
+MariaDB [king]> CREATE PROCEDURE sp1() SELECT VERSION();
+
+调用存储过程：
+a.CALL sp_name([parameter[,...]]);
+b.CALL sp_name[()];
+ps:
+MariaDB [king]> CALL sp1;
+
+
+MariaDB [king]> DELIMITER $$
+MariaDB [king]> CREATE PROCEDURE removeUserById(IN input_id INT UNSIGNED)
+    -> BEGIN
+    -> DELETE FROM users WHERE id = input_id;
+    -> END
+    -> $$
+MariaDB [king]> DELIMITER ;
+MariaDB [king]> CALL removeUserById(7);
+
+
+MariaDB [king]> DELIMITER $$
+MariaDB [king]> CREATE PROCEDURE removeUserAndReturnUserNums(IN input_id INT UNSIGNED,OUT userNums INT UNSIGNED)
+    -> BEGIN
+    -> DELETE FROM users WHERE id = input_id;
+    -> SELECT count(id) FROM users INTO userNums;
+    -> END
+    -> $$
+MariaDB [king]> DELIMITER ;
+MariaDB [king]> CALL removeUserAndReturnUserNum(2,@nums);
+
+
+MariaDB [king]> DELIMITER $$
+MariaDB [king]> CREATE PROCEDURE removeUserByAgeAndReturnInfos(IN input_age SMALLINT UNSIGNED,OUT deleteUsers SMALLINT UNSIGNED,OUT userCounts SMALLINT UNSIGNED)
+    -> BEGIN
+    -> DELETE FROM users WHERE age = input_age;
+    -> SELECT ROW_COUNT() INTO deleteUsers;
+    -> SELECT COUNT(id) FROM users INTO userCounts;
+    -> END
+    -> $$
+MariaDB [king]> DELIMITER ;
+MariaDB [king]> CALL removeUserByAgeAndReturnInfos(16,@a,@b);
+MariaDB [king]> select @a;
+MariaDB [king]> select @b;
+
+
+删除存储过程：
+DROP PROCEDURE [IF EXISTS] sp_name;
+
+存储过程与自定义函数的区别：
+a.存储过程实现的功能要复杂一些；而函数的针对性更强。
+b.存储过程可以返回多个值；函数只能有一个返回值。
+c.存储过程一般独立的执行；而函数可以作为其他SQL语句的组成部分来出现。
+
 -----------------------------------------------------
 -----------------------------------------------------
 -----------------------------------------------------
