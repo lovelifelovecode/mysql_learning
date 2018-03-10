@@ -741,7 +741,7 @@ MariaDB [king]> SELECT MD5('123456');
 
 [自定义函数]
 CREATE FUNCTION function_name
-RET URNS
+RETURNS
 {STRING|INTEGER|REAL|DECIMAL}
 routine_body;
 PS:
