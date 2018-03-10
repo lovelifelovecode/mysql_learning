@@ -1,2 +1,1 @@
-# mysql_learning
-mysql笔记记录
+About the study or review of MySQL.
