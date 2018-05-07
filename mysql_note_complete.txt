@@ -92,7 +92,7 @@ mysql语名的规范:
 [数据库]
 要在MySQL中创建数据库，请使用CREATE DATABASE语句，如下：
 CREATE {DATABASE | SCHEMA} [IF NOT EXISTS] database_name [DEFAULT] CHARACTER SET [=] charset_name;
-ps:CREATE DATABASE IF NOT EXISTS test DEFAULT CHARARTER SET = utf8;
+ps:CREATE DATABASE IF NOT EXISTS test DEFAULT CHARACTER SET = utf8;
 
 SHOW DATABASES: 列出 MySQL 数据库管理系统的数据库列表。
 
@@ -133,7 +133,8 @@ CREATE TABLE [IF NOT EXITS] table_name(
 ) engine=table_type;
 
 
-查看创建数据库时:SHOW CREATE TABLE table_name;
+查看创建数据库时:SHOW CREATE TABLE table_name \G;
+查看表结构:desc table_name;
 
 PS:
 MariaDB [king]> CREATE TABLE user(
@@ -144,7 +145,75 @@ MariaDB [king]> CREATE TABLE user(
 
 note:unsigned是无符号位的意思.
 
+删除数据表:DROP TABLE table_name;
+
 SHOW COLUMNS FROM table_name: 显示数据表的属性，属性类型，主键信息 ，是否为 NULL，默认值等其他信息。
+
+
+
+[修改数据表]
+修改数据表名:
+ ALTER TABLE table_name RENAME table_name_new [FIRST | AFTER col_name];
+
+
+修改列定义:
+ALTER TABLE table_name MODIFY col_name column_definition [FIRST | AFTER col_name];
+
+修改列名:
+ALTER TABLE table_name CHANGE col_name_old col_name_new column_definition;
+
+添加单列：
+ALTER TABLE table_name ADD [COLUMN] col_name column_definition [FIRST | AFTER col_name]; 
+
+添加多列：ALTER TABLE table_name ADD [COLUMN] (col_name column_defination,...);
+
+删除列：
+ALTER TABLE table_name DROP [COLUMN] col_name;
+
+删除多列：
+ALTER TABLE table_name DROP [COLUMN] col_name1，col_name2,...;
+
+添加主键约束：
+ALTER TABLE table_name ADD [CONSTRAINT [symbol]] PRIMARY KEY [index_type](index_col_name,...);
+ps:MariaDB [king]> ALTER TABLE users2 ADD CONSTRAINT PK_users2_id PRIMARY KEY(id);
+
+添加唯一约束：
+ALTER TABLE table_name ADD [CONSTRAINT [symbol]] UNIQUE [INDEX|key][index_name] [index_type] (index_col_name,...);
+ps:MariaDB [king]> ALTER TABLE users2 ADD UNIQUE (username);
+
+添加外键约束：
+ALTER TABLE table_name ADD [CONSTRAINT [symbol]] FOREIGN KEY [index_name] (index_col_name,...) reference_defination;
+ps:MariaDB [king]> ALTER TABLE users2 ADD FOREIGN KEY (pid) REFERENCES provinces(id);
+
+添加／删除默认约束：
+ALTER TABLE table_name ALTER [COLUMN] col_name {SET DEFAULT literal | DROP DEFAULT}
+PS:MariaDB [king]> ALTER TABLE users2 ALTER age SET DEFAULT 22;
+
+删除主键约束：
+ALTER TABLE table_name DROP PRIMARY KEY;
+
+删除唯一约束：
+ALTER TABLE table_name DROP {INDEX|KEY} index_name;
+ps:MariaDB [king]> ALTER TABLE users2 DROP INDEX username;
+
+删除外键约束：
+ALTER TABLE table_name DROP FOREIGN KEY fk_symbol;
+ps:
+show create table users2;
+ALTER TABLE users2 DROP  FOREIGN KEY users2_ibfk_1;
+注：外键约束的名字users2_ibfk_1是通过show create table users2;查看。
+
+修改列定义：
+ALTER TABLE table_name MODIFY [COLUMN] col_name column_defination [FIRST|AFTER col_name];
+
+修改列名称：
+ALTER TABLE table_name CHANGE [COLUMN] old_col_name new_col_name column_defination [FIRST | AFTER col_name];
+
+修改数据表名：
+方法1：ALTER TABLE table_name RENAME [TO|AS] new_table_name;
+方法2：RENAME TABLE table_name TO new_table_name [,table_name2 TO new_table_name2]...;
+
+
 
 INSERT [INTO] table_name [(col_name,...)] VALUES(val,...);
 
@@ -261,57 +330,6 @@ MariaDB [king]> CREATE TABLE users1(
 2.对多个数据列建立的约束，称为表级约束。
 3.列级约束既可以在列定义的时声明，也可以在列定义后声明。表级约束只能在列定义后声明。
 
-[修改数据表]
-添加单列：
-ALTER TABLE table_name ADD [COLUMN] col_name column_definition [FIRST | AFTER col_name]; 
-
-添加多列：ALTER TABLE table_name ADD [COLUMN] (col_name column_defination,...);
-
-删除列：
-ALTER TABLE table_name DROP [COLUMN] col_name;
-
-删除多列：
-ALTER TABLE table_name DROP [COLUMN] col_name1，col_name2,...;
-
-添加主键约束：
-ALTER TABLE table_name ADD [CONSTRAINT [symbol]] PRIMARY KEY [index_type](index_col_name,...);
-ps:MariaDB [king]> ALTER TABLE users2 ADD CONSTRAINT PK_users2_id PRIMARY KEY(id);
-
-添加唯一约束：
-ALTER TABLE table_name ADD [CONSTRAINT [symbol]] UNIQUE [INDEX|key][index_name] [index_type] (index_col_name,...);
-ps:MariaDB [king]> ALTER TABLE users2 ADD UNIQUE (username);
-
-添加外键约束：
-ALTER TABLE table_name ADD [CONSTRAINT [symbol]] FOREIGN KEY [index_name] (index_col_name,...) reference_defination;
-ps:MariaDB [king]> ALTER TABLE users2 ADD FOREIGN KEY (pid) REFERENCES provinces(id);
-
-添加／删除默认约束：
-ALTER TABLE table_name ALTER [COLUMN] col_name {SET DEFAULT literal | DROP DEFAULT}
-PS:MariaDB [king]> ALTER TABLE users2 ALTER age SET DEFAULT 22;
-
-删除主键约束：
-ALTER TABLE table_name DROP PRIMARY KEY;
-
-删除唯一约束：
-ALTER TABLE table_name DROP {INDEX|KEY} index_name;
-ps:MariaDB [king]> ALTER TABLE users2 DROP INDEX username;
-
-删除外键约束：
-ALTER TABLE table_name DROP FOREIGN KEY fk_symbol;
-ps:
-show create table users2;
-ALTER TABLE users2 DROP  FOREIGN KEY users2_ibfk_1;
-注：外键约束的名字users2_ibfk_1是通过show create table users2;查看。
-
-修改列定义：
-ALTER TABLE table_name MODIFY [COLUMN] col_name column_defination [FIRST|AFTER col_name];
-
-修改列名称：
-ALTER TABLE table_name CHANGE [COLUMN] old_col_name new_col_name column_defination [FIRST | AFTER col_name];
-
-修改数据表名：
-方法1：ALTER TABLE table_name RENAME [TO|AS] new_table_name;
-方法2：RENAME TABLE table_name TO new_table_name [,table_name2 TO new_table_name2]...;
 
 
 [操作数据表中的记录]
@@ -377,9 +395,15 @@ ps:
 MariaDB [king]> select id,username from users where id%2=0;
 MariaDB [king]> select id,username AS uname from users;
 
+查询用户表中年龄不重复的记录
+mysql> select distinct age from user;
+
+
+
 条件表达式：
 1.对记录进行过滤，如果没有指定WHERE子句，则显示所有记录。
 2.在WHERE表达式中，可以使用MySQL去持的函数或运算符。
+3.多个条件之间还可以使用or,and等逻辑运算符进行多条件联合查询。
 
 查询结果分组：
 [GROUP BY {col_name | positioin} [ASC|DESC],...];
@@ -387,6 +411,7 @@ ps:
 MariaDB [king]> select sex from users group by sex;
 
 分组条件(HAVING):
+having与where的区别是：having是聚合后的结果进行条件过滤，而where是聚合前对记录进行过滤。
 [HAVING where_condition]
 ps:
 MariaDB [king]> SELECT sex,age FROM users GROUP BY sex HAVING age > 20;
@@ -732,6 +757,14 @@ MariaDB [king]> SELECT MAX(id) FROM test;
 MariaDB [king]> SELECT MIN(id) FROM test;
 MariaDB [king]> SELECT SUM(id) FROM test;
 
+统计用户表中各年龄的人数
+mysql> select age,count(1) from user group by age;
+
+统计用户表中各年龄的人数和总人数
+mysql> select age,count(1) from user group by age with rollup;
+
+统计用户表中年龄段多于1人的年龄
+mysql> select age,count(1) from users group by age having count(1)>1;
 
 加密函数：
 MD5() 信息摘要算法
@@ -883,3 +916,867 @@ _ENGINE = engine;
 leaning to this:已学完（2018/01/24)
 -----------------------------------------------------
 -----------------------------------------------------
+
+union和union all的主要区别是，union all是把结果集接合并在一起，而union是将union all后的结果进行一次distinct,去除重复记录后的结果。
+
+mysql> select deptno from emp 
+    -> union all 
+    -> select deptno from dept;
+
+mysql>  select deptno from emp 
+    ->   union  
+    ->  select deptno from dept;
+
+
+创建一个数据库用户z1，具有对test数据库中所有表的select/insert权限。
+
+按层次看帮助
+mysql> ? contents  显示所有可供查询的分类。
+mysql> ? data types; 可以使用 ? 类别名称  的方式对内容进一步的查看。
+
+在实际应用中，如需快速查询某项语法，可以使用关键字进行快速查询。如
+mysql> ? show
+
+
+数值类型：
+整数类型：tinyint(1字节） smallint（2字节） mediumint（3字节） int（4字节） bigint （8字节）
+浮点类型：float（4字节） double（8字节）
+定点数类型：dec（M，D）由M和D决定
+位类型：bit（1－8字节）
+
+对于整数类型，mysql支持在类型后面的小括号内指定显示宽度，如int(5)表示当数值宽度小于5时，在数字前面填满宽度，如果不显示指定宽度则默认为int(11).一般配合zerofill使用，就是在数字位数不够的空间用字符0填满。
+mysql> create table if not exists a(
+    -> id int(5) zerofill
+    -> );
+Query OK, 0 rows affected (0.12 sec)
+
+mysql> insert into a values(123);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from a;
++-------+
+| id    |
++-------+
+| 00123 |
++-------+
+
+浮点类型(float double)和定点数类型（dec）的区别。浮点类型不写精度，按实际精度写入，如果写精度，按精度四舍五入。定点类型默认为decimal(10,0),如果超出精度会报warning错。通常用于货币等精度高的数据。
+mysql> create table if not exists a1(
+    -> id1 float(8,2),
+    -> id2 double(8,2),
+    -> id3 decimal(8,2)
+    -> );
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> insert into a1 values(1.23,1.2345,1.23);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into a1 values(1.23,1.2345,1.234);
+Query OK, 1 row affected, 1 warning (0.02 sec)
+
+mysql> select * from a1;
++------+------+------+
+| id1  | id2  | id3  |
++------+------+------+
+| 1.23 | 1.23 | 1.23 |
+| 1.23 | 1.23 | 1.23 |
++------+------+------+
+
+
+bit类型可以存放二进制数据，直接select看不到数据，要用bin()函数。
+mysql> create table if not exists a2(
+    -> id bit
+    -> );
+Query OK, 0 rows affected (0.15 sec)
+
+mysql> insert into a2 values(1);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> select bin(id) from a2;
++---------+
+| bin(id) |
++---------+
+| 1       |
++---------+
+1 row in set (0.00 sec)
+
+
+
+时间类型：
+date(4字节) datetime(8字节) timestamp(4字节) time(3字节) year(1字节)
+timestamp类型字段只能有一列的默认值为current_timestamp.
+
+timestamp和时区相关：
+mysql> show variables like 'time_zone';
++---------------+--------+
+| Variable_name | Value  |
++---------------+--------+
+| time_zone     | SYSTEM |
++---------------+--------+
+1 row in set (0.00 sec)
+
+mysql> create table if not exists a3(
+    -> id1 datetime,
+    -> id2 timestamp
+    -> );
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> insert into a3 values(now(),now());
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from a3;
++---------------------+---------------------+
+| id1                 | id2                 |
++---------------------+---------------------+
+| 2018-04-26 12:20:52 | 2018-04-26 12:20:52 |
++---------------------+---------------------+
+1 row in set (0.00 sec)
+
+mysql> set  time_zone='+9:00';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from a3;
++---------------------+---------------------+
+| id1                 | id2                 |
++---------------------+---------------------+
+| 2018-04-26 12:20:52 | 2018-04-26 13:20:52 |
++---------------------+---------------------+
+1 row in set (0.00 sec)
+
+
+字符串类型：
+char varchar binary varbinary blob text enum set 等
+
+
+
+数据库中char与varchar类型的区别
+首先明确的是，char的长度是不可变的，而varchar的长度是可变的，也就是说，定义一个char[10]和varchar[10],如果存进去的是‘csdn’,那么char所占的长度依然为10，除了字符‘csdn’外，后面跟六个空格，而varchar就立马把长度变为4了，取数据的时候，char类型的要用trim()去掉多余的空格，而varchar是不需要的。
+
+尽管如此，char的存取数度还是要比varchar要快得多，因为其长度固定，方便程序的存储与查找；但是char也为此付出的是空间的代价，因为其长度固定，所以难免会有多余的空格占位符占据空间，可谓是以空间换取时间效率，而varchar是以空间效率为首位的。
+
+再者，char的存储方式是，对英文字符（ASCII）占用1个字节，对一个汉字占用两个字节；而varchar的存储方式是，对每个英文字符占用2个字节，汉字也占用2个字节。
+
+
+
+binary和varbinary的区别与char和varchar差不多。只是存的是包含二进制字符串。
+
+
+enum类型为枚举类型。
+enum是忽略大小写的，当插入的数据不在指定范围时，会插入第一个值，这点要特别注意。
+enum只允许从值集合中选取单个值。
+mysql> create table if not exists a5(
+    -> gender enum('B','G')
+    -> );
+Query OK, 0 rows affected (0.13 sec)
+
+mysql> INSERT INTO a5 values('b'),('1'),('G'),(null);
+Query OK, 4 rows affected (0.02 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from a5;
++--------+
+| gender |
++--------+
+| B      |
+| B      |
+| G      |
+| NULL   |
++--------+
+4 rows in set (0.00 sec)
+
+
+set类型与enum类似，但是它是多选。
+set对于重复的记录只会写入一次。
+set对于插入不在集合内的数据会录入空。
+mysql> create table if not exists a6(
+    -> love set('a','b','c','d')
+    -> );
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> insert into a6 values('a,b'),('a,b,a,a'),('c');
+Query OK, 3 rows affected (0.03 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from a6;
++------+
+| love |
++------+
+| a,b  |
+| a,b  |
+| c    |
++------+
+3 rows in set (0.00 sec)
+
+
+
+算术运算符：＋ － ＊　／,DIV %,MOD
+mysql> select 3+4;
+
+比较运算符：= < <= > >= between in     is null    is not null  like(通配符区配）   regexp/rlike（正则表达式匹配）
+比较运算符结果为真，返回１，为假，则返回0,不确定则返回NULL
+mysql> select 1=0,1<>3,'a'<'b','bdf'<='b',17 between 10 and 20,3 in(1,3,5),'xiaoing' like '%ao%','jing' regexp 'in';
+
+
+
+逻辑运算符：not/! and/&& or/|| xor
+1.not null的返回值为null
+2.and运算中有任何一个为null时，结果为null
+3.xor运算中任一个操件为null时，返回值为null
+
+
+位运算符：& | ^ ~ >> <<
+位运算符是把给定的操作数转为二进制来运算，再把结果转回来。
+
+
+
+字符串函数：
+concat(s1,s2,...Sn)
+insert(str,x,y,instr)
+lower(str)
+upper(str)
+left(str,x)
+right(str,x)
+lpan(str,n,pad)
+rpad(str,n,pad)
+ltrim(str)
+rtrim(str)
+trim(str)
+repeat(str)
+replace(str,a,b)
+strcmp(s1,s2)
+substring(str,x,y)
+
+
+
+数值函数：
+abs(x)
+ceil(x)
+floor(x)
+mod(x)
+rand()
+round(x,y)
+truncate(x,y)
+
+ps:产生0到100内的随机数
+mysql> select ceil(100*rand());
+
+
+
+时间日期函数：
+curdate()
+curtime()
+now()
+unix_timestamp(date)
+from_unixtime(unixtime)
+week(date)
+year(date)
+hour(time)
+minute(time)
+monthname(data)
+date_format(date,fmt)
+date_add(date,interval expr type)
+datediff(expr1,expr2)
+
+ps:mysql> select date_format(now(),'%M,%D,%Y');
+mysql> select date_add(now(),interval 100 day) after100days;
+
+
+
+流程函数：
+if(value,t,f)
+ifnull(value1,value2)
+case when [value] then [result1]...else[default] end
+case [expr] when [value] then [result]...else[default] end
+
+ps:
+mysql> create table salary(userid int,salary decimal(9,2));
+Query OK, 0 rows affected (0.12 sec)
+
+mysql> insert into salary values(1,1000),(2,2000),(3,3000),(4,4000),(5,5000),(1,null);
+Query OK, 6 rows affected (0.04 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select if(salary>2000,'high','low') from salary;
++------------------------------+
+| if(salary>2000,'high','low') |
++------------------------------+
+| low                          |
+| low                          |
+| high                         |
+| high                         |
+| high                         |
+| low                          |
++------------------------------+
+6 rows in set (0.00 sec)
+
+mysql> select ifnull(salary,0) from salary;
++------------------+
+| ifnull(salary,0) |
++------------------+
+|          1000.00 |
+|          2000.00 |
+|          3000.00 |
+|          4000.00 |
+|          5000.00 |
+|             0.00 |
++------------------+
+6 rows in set (0.00 sec)
+
+mysql> select case when salary<=2000 then 'low' else 'high' end from salary;
++---------------------------------------------------+
+| case when salary<=2000 then 'low' else 'high' end |
++---------------------------------------------------+
+| low                                               |
+| low                                               |
+| high                                              |
+| high                                              |
+| high                                              |
+| high                                              |
++---------------------------------------------------+
+6 rows in set (0.00 sec)
+
+mysql> select case salary when 1000 then 'low' when 2000 then 'mid' else 'high' end from salary;
++-----------------------------------------------------------------------+
+| case salary when 1000 then 'low' when 2000 then 'mid' else 'high' end |
++-----------------------------------------------------------------------+
+| low                                                                   |
+| mid                                                                   |
+| high                                                                  |
+| high                                                                  |
+| high                                                                  |
+| high                                                                  |
++-----------------------------------------------------------------------+
+6 rows in set (0.00 sec)
+
+
+
+其他常用函数：
+database()
+version()
+user()
+inet_aton(ip)
+inet_ntoa(num)
+password(str)
+md5()
+
+
+
+存储引擎：
+可以通过下面方法查看当前数据库支持的存储引擎：
+mysql> show engines \G;
+
+创建新表时，可以设定用哪种存储引擎：
+mysql> create table if not exists a7(
+    -> id int
+    -> )engine=InnoDB default charset=utf8;
+
+修改一个已存在的表存储引擎：
+mysql> alter table a7 engine =myisam;
+
+
+MyISAM不支持事务，也不支持外键，其优势是访问的速度快，对事务完整性没有要求或者以select,insert为主的应用基本上都可以使用这个引擎来创建表。
+MyISAM支持３种静态表（固定长度），动态表，压缩表。其中静态表是默认的存储格式。
+静态表的优点：存储迅速，容易缓存，出现故障容易恢复。缺点是占用空间。
+特别注意：静态表的数据在存储时会按照列的宽度定义补足空格，在取出前已去掉空格。所以保存的数据尾部本来有空格的，在取出后也会丢失。
+
+mysql> insert into a8 values('abc'),('  abc'),('abc  '),('  abc  ');
+Query OK, 4 rows affected (0.00 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select name,length(name) from  a8;
++-------+--------------+
+| name  | length(name) |
++-------+--------------+
+| abc   |            3 |
+|   abc |            5 |
+| abc   |            3 |
+|   abc |            5 |
++-------+--------------+
+4 rows in set (0.01 sec)
+
+
+
+InnoDB存储引擎提供了具有提交，回滚和崩溃恢复能力的事务安全。但是对比MyISAM存储引擎，InnoDB写的处理效率差一些，并占用更多的磁盘空间以保留数据和索引。
+InnoDB的表可以手工插入自动增长列。如果插入的值是空或者0, 则实际插入的将是自动增长后的值。可以通过“alter table *** auto_increment=n;“语句强制设置自动增长的初始值。
+可以使用"select last_insert_id();"查询当前线程最后插入的记录值。如果一次插入多条记录，则返回多条记录的第一条id.
+
+对于InnoDB表，自动增长列必须是索引。如果是组合索引，也必须是组合索引中的第一列。但是对于MyISAM表，自动增长列可以是组合索产引的其他列，这样插入记录后，自动增长列是按照组合索引的前面几列进行排序后递增的。
+
+mysql> create table if not exists autoincre_demo(
+    -> d1 smallint not null auto_increment,
+    -> d2 smallint not null,
+    -> name varchar(10),
+    -> index(d2,d1)
+    -> )engine=myisam default charset=utf8;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> insert into autoincre_demo(d2,name)values(2,'2'),(3,'3'),(4,'4'),(2,'2'),(3,'3'),(4,'4');
+Query OK, 6 rows affected, 1 warning (0.01 sec)
+Records: 6  Duplicates: 0  Warnings: 1
+
+mysql> select * from autoincre_demo;
++----+----+------+
+| d1 | d2 | name |
++----+----+------+
+|  1 |  2 | 2    |
+|  1 |  3 | 3    |
+|  1 |  4 | 4    |
+|  2 |  2 | 2    |
+|  2 |  3 | 3    |
+|  2 |  4 | 4    |
++----+----+------+
+6 rows in set (0.00 sec)
+
+
+只有InnoDB支持外键约束。在创建外键的时候，要求父表必须有对应的索引，子表在创键的时候了会自动创建对应的索引。
+
+外键约束的参数(数据表必须为INNODB)：
+1.CASCADE:从父表删除或更新且自动删除或更新子表中匹配的行。(同步删除或更新，ps:删除文章时，对应的文章评论也会同步删除)
+2.SET NULL：从父表删除或更新行，并设置子表中的外键列为NULL。如果使用该选项，必须保证子表列没有指定NOT NULL。
+3.RESTRICT：拒对父表的删除或更新操作。
+4.NO ACTION：标准SQL的关键字，在MySQL中与RESTRICT相同。
+
+mysql> create table if not exists country(
+    -> country_id smallint unsigned not null auto_increment,
+    -> country varchar(20) not null,
+    -> last_update timestamp not null default current_timestamp on update current_timestamp,
+    -> primary key (country_id)
+    -> )engine=InnoDB default charset=utf8;
+Query OK, 0 rows affected (0.15 sec)
+
+mysql> create table if not exists city(
+    -> city_id smallint unsigned not null auto_increment,
+    -> city varchar(50) not null,
+    -> country_id smallint unsigned not null,
+    -> last_update timestamp not null default current_timestamp on update current_timestamp,
+    -> primary key(city_id),
+    -> key idx_fk_country_id(country_id),
+    -> foreign key (country_id) references country (country_id) on delete restrict on update cascade
+    -> )engine=InnoDB default charset=utf8;
+Query OK, 0 rows affected (0.08 sec)
+
+例如上案例：在主表删除记录时，如果子表有对应的记录，则不允许删除，主表在更新记录时，如果子表有对应的记录，则子表对应更新。
+mysql> insert into country(country)values('China');
+Query OK, 1 row affected (0.03 sec)
+
+
+mysql> insert into city(city,country_id)values('GuangZhou',1);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from country;
++------------+---------+---------------------+
+| country_id | country | last_update         |
++------------+---------+---------------------+
+|          1 | China   | 2018-05-05 18:22:00 |
++------------+---------+---------------------+
+1 row in set (0.00 sec)
+
+mysql> select * from city;
++---------+-----------+------------+---------------------+
+| city_id | city      | country_id | last_update         |
++---------+-----------+------------+---------------------+
+|       1 | GuangZhou |          1 | 2018-05-05 18:22:43 |
++---------+-----------+------------+---------------------+
+1 row in set (0.00 sec)
+
+mysql> delete from country where country_id=1;
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`test`.`city`, CONSTRAINT `city_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `country` (`country_id`) ON UPDATE CASCADE)
+
+mysql> update country set country_id = 77 where country_id=1;
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from city;
++---------+-----------+------------+---------------------+
+| city_id | city      | country_id | last_update         |
++---------+-----------+------------+---------------------+
+|       1 | GuangZhou |         77 | 2018-05-05 18:22:43 |
++---------+-----------+------------+---------------------+
+1 row in set (0.00 sec)
+
+当某个表被其他表创建了外键参照，那么该表的对应索引或者主键禁止被删除。
+在导入多个表的数据时，如果需要忽略表之前的导入顺序，可以暂时关闭外键的检查；同样，在执行load data和alter table操作的时候，可以通过暂时关闭外键约束来加快处理的速度。关闭的命令是"set foreign_key_checks=0;"，执行完成之后，通过执行"set foreign_key_checks=1;"改回原来的状态。
+
+对于InnoDB类型的表，外键的信息通过show create table或者show table status命令都可以显示。
+ps:mysql> show table status like 'city' \G
+
+
+memory存储擎使用存在于内存中的内容来创建表。
+mysql> create table tab_memory engine=memory
+    -> select city_id,city,country_id
+    -> from city group by city_id;
+Query OK, 1 row affected (0.05 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> select * from tab_memory;
++---------+-----------+------------+
+| city_id | city      | country_id |
++---------+-----------+------------+
+|       1 | GuangZhou |         77 |
++---------+-----------+------------+
+1 row in set (0.00 sec)
+
+
+给memory表创建索引的时候，可以指定使用HASH索引还是BTREE索引。
+mysql> create index mem_hash using hash on tab_memory (city_id);
+Query OK, 1 row affected (0.03 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> show index from tab_memory \G
+*************************** 1. row ***************************
+        Table: tab_memory
+   Non_unique: 1
+     Key_name: mem_hash
+ Seq_in_index: 1
+  Column_name: city_id
+    Collation: NULL
+  Cardinality: 0
+     Sub_part: NULL
+       Packed: NULL
+         Null: 
+   Index_type: HASH
+      Comment: 
+Index_comment: 
+1 row in set (0.00 sec)
+
+mysql> drop index mem_hash on tab_memory;
+Query OK, 1 row affected (0.04 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> create index mem_hash using btree on tab_memory (city_id);
+Query OK, 1 row affected (0.01 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> show index from tab_memory \G
+*************************** 1. row ***************************
+        Table: tab_memory
+   Non_unique: 1
+     Key_name: mem_hash
+ Seq_in_index: 1
+  Column_name: city_id
+    Collation: A
+  Cardinality: NULL
+     Sub_part: NULL
+       Packed: NULL
+         Null: 
+   Index_type: BTREE
+      Comment: 
+Index_comment: 
+1 row in set (0.00 sec)
+
+在启动mysql服务的时候使用--init-file选项，把insert into ... select或load data infile这样的语句放入这个文件中，就可以在服务启动时从持久稳固的数据源装载表。
+每个memory表可以放置的数据大小，受到max_heap_table_size系统变量的约束，初始值是16MB.
+在定义memory表的时候，可以通过max_rows子句指定表的最大行数。
+
+memory类型的存储存引擎主要用于那些内容变仳不频繁的代码表，或者作为统计操作的中间结果表，便于高效地对中间结果进行分析并得到最终结果。
+
+
+
+merge存储引擎是一组myisam表的组合，merge表本身并没有数据。
+构成一个MERGE数据表结构的各成员MyISAM数据表必须具有完全一样的结构。每一个成员数据表的数据列必须按照同样的顺序定义同样的名字和类型，索引也必须按照同样的顺序和同样的方式定义。
+通过insert_method子名定义插入的表，可以有３个不同的值，使用first或者last值使得插入操作被相应地作用在第一或最后一个表上，不定义或者定义为NO，则表示不能对这个merge表执行插入操作。
+通常使用merge表来透明地对多个表进行查询和更新操作，而对这种按时间记录的操作日志表则可以透明地进行插入操作。
+mysql> create table payment_2006(
+    -> country_id smallint,
+    -> payment_date datetime,
+    -> amount decimal(15,2),
+    -> key idx_fk_country_id (country_id)
+    -> )engine=myisam default charset=utf8;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table payment_2007(
+    -> country_id smallint,
+    -> payment_date datetime,
+    -> amount decimal(15,2),
+    -> key idx_fk_country_id (country_id)
+    -> )engine=myisam default charset=utf8;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table payment_all(
+    -> country_id smallint,
+    -> payment_date datetime,
+    -> amount decimal(15,2),
+    -> index(country_id)
+    -> )engine=merge union=(payment_2006,payment_2007) insert_method=last;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> insert into payment_2006 values(1,'2006-03-07',5000),(2,'2006-07-12',6000);
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> insert into payment_2007 values(1,'2007-08-08',4500),(2,'2007-08-11',5000);
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from payment_2006;
++------------+---------------------+---------+
+| country_id | payment_date        | amount  |
++------------+---------------------+---------+
+|          1 | 2006-03-07 00:00:00 | 5000.00 |
+|          2 | 2006-07-12 00:00:00 | 6000.00 |
++------------+---------------------+---------+
+2 rows in set (0.00 sec)
+
+mysql> select * from payment_2007;
++------------+---------------------+---------+
+| country_id | payment_date        | amount  |
++------------+---------------------+---------+
+|          1 | 2007-08-08 00:00:00 | 4500.00 |
+|          2 | 2007-08-11 00:00:00 | 5000.00 |
++------------+---------------------+---------+
+2 rows in set (0.00 sec)
+
+mysql> select * from payment_all;
++------------+---------------------+---------+
+| country_id | payment_date        | amount  |
++------------+---------------------+---------+
+|          1 | 2006-03-07 00:00:00 | 5000.00 |
+|          2 | 2006-07-12 00:00:00 | 6000.00 |
+|          1 | 2007-08-08 00:00:00 | 4500.00 |
+|          2 | 2007-08-11 00:00:00 | 5000.00 |
++------------+---------------------+---------+
+4 rows in set (0.00 sec)
+
+mysql> insert into payment_all values(3,'2006-11-08',4500);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from payment_2007;
++------------+---------------------+---------+
+| country_id | payment_date        | amount  |
++------------+---------------------+---------+
+|          1 | 2007-08-08 00:00:00 | 4500.00 |
+|          2 | 2007-08-11 00:00:00 | 5000.00 |
+|          3 | 2006-11-08 00:00:00 | 4500.00 |
++------------+---------------------+---------+
+3 rows in set (0.00 sec)
+
+mysql> select * from payment_2006;
++------------+---------------------+---------+
+| country_id | payment_date        | amount  |
++------------+---------------------+---------+
+|          1 | 2006-03-07 00:00:00 | 5000.00 |
+|          2 | 2006-07-12 00:00:00 | 6000.00 |
++------------+---------------------+---------+
+2 rows in set (0.00 sec)
+
+
+常用的第三方存储引擎：
+列式存储引擎Infobright
+高写性能高压的TokuDB
+
+TokuDB适合以下几种场景：
+1.日志，插入频繁，存储量大。
+2.历史数据，通常不会再有写操作，可用TokuDB的高压缩特性进行存储。
+3.在线DDL较频繁的场景，使用TokuDB可以大大增加系统的可用性。
+
+
+如何选择合适的存储引擎：
+myisam以读操作和插入操作为主，只有很少的更新和删除操作，并且对事务的完整性要求不是很高，选择这个存储引擎非常合适。
+
+InnoDB用于事务处理应用程序，支持外键。如果庆用对事务的完整性有比较高的要求，在并发条件下要求数据的一致性，数据除了插入和查询外，还包括很多的更新，删除操作，那么InnoDB比较合适。InnoDB除了有效隆低由于删除和更新导致的锁定，还可以确保事务的完整提交(Commit)和回滚(Rollback)，对于类似计费系统和财务系统，InnoDB是合适的选择。
+
+memory表访问速度快，缺陷是对表的大小有限制，通常用于更新不太频的小表，用以快速得到结果。
+
+merge用于将一系列等同的MyISAM表以逻辑方式组合在一起，并作为一个对象使用它们。merge表的优点在在可以突破单个MyISAM表的大小限制，并且通过将不同的表分布有多个磁盘上，可以有效地改善merge表的访问效率。
+
+
+
+
+
+
+
+选择合适的数据类型
+
+char属于固定长度的字符类型，而varchar属于可变长度的字符类型。
+注意：在检索时，char删除了尾部的空格。
+mysql> insert into vc values('ab ','ab ');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select concat(v,'+'),concat(c,'+') from vc;
++---------------+---------------+
+| concat(v,'+') | concat(c,'+') |
++---------------+---------------+
+| ab +          | ab+           |
++---------------+---------------+
+1 row in set (0.00 sec)
+
+由于char是固定长度的，所以处理速度比varchar快，但缺点是浪费存储空间，和序需要对行尾空格进行处理。别外，随着mysql版本不断升级，varchar的性能也在不断改进并提高，所以在许多应用中，varchar类型被更多地使用。
+
+MyISAM存储引擎:建议使用固定长度的数据列代替可变长度的数据列。
+MEMORY存储引擎:目前都使用固定长度的数据行存储，因此都无所谓，varchr会作为char类型处理。
+InnoDB存储引擎:建议使用varchar类型。对于InnoDB数据表，内部的行存储格式没有区分固定长度和可变长度列（所有数据行都使用指向数据列值的关指针），因此在本质上，使用固定长度的char列不一定比使用可变长度varchar列性能好。
+
+
+
+TEXT和BLOB都能保存较大文本，二者主要区别是，blob能用来保存二进制数据，比如图片。text和blob中又包含text,mediumtext,longtext和blob,mediumblob,longblob三种不同的类型。
+text和blob值会引起一些性能问题，特别是在执行了大量删除操作时。删除操作会在数据表中留下很大的空洞，以后填入这些空洞的记录在插入的性能上有影响。
+为了提高性能，建议定期使用optimizf table功能对这类表进行碎片整理。
+mysql> create table if not exists t(id varchar(100),context text engine=myisam);
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> insert into t values(1,repeat('haha',100));
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into t values(2,repeat('goodboy ',100));
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into t values(2,repeat('haining ',100));
+Query OK, 1 row affected (0.04 sec)
+
+
+mysql> insert into t select * from t;
+Query OK, 3 rows affected (0.05 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> insert into t select * from t;
+Query OK, 6 rows affected (0.04 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> insert into t select * from t;
+Query OK, 12 rows affected (0.02 sec)
+Records: 12  Duplicates: 0  Warnings: 0
+
+...
+
+mysql> insert into t select * from t;
+Query OK, 32768 rows affected (0.06 sec)
+Records: 32768  Duplicates: 0  Warnings: 0
+
+[root@localhost test]# pwd
+/var/lib/mysql/test
+
+[root@localhost test]# du -sh t.*
+12K	t.frm
+64M	t.MYD
+4.0K	t.MYI
+
+mysql> delete from t where id=1;
+Query OK, 32768 rows affected (0.19 sec)
+
+[root@localhost test]# du -sh t.*
+12K	t.frm
+64M	t.MYD
+4.0K	t.MYI
+
+可以发现，表t的数据文件仍为64M,并没有因为数据的删除而减少。接下来用optimize优化操作：
+mysql> optimize table t;
++--------+----------+----------+----------+
+| Table  | Op       | Msg_type | Msg_text |
++--------+----------+----------+----------+
+| test.t | optimize | status   | OK       |
++--------+----------+----------+----------+
+1 row in set (0.14 sec)
+
+[root@localhost test]# du -sh t.*
+12K	t.frm
+51M	t.MYD
+4.0K	t.MYI
+
+
+可以使用合成的(Synthetic)索引来提高大文本字段(blob或text)的查询性能。但要注意就种技术只能用于精确查找。
+mysql> create table if not exists t2(id varchar(100),context blob,hash_value varchar(32));
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> insert into t2 values(1,repeat('beijing',2),md5(context));
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into t2 values(2,repeat('guangzhou',2),md5(context));
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from t2;
++------+--------------------+----------------------------------+
+| id   | context            | hash_value                       |
++------+--------------------+----------------------------------+
+| 1    | beijingbeijing     | 09746eef633dbbccb7997dfd795cff17 |
+| 2    | guangzhouguangzhou | 5f4e91da5685b7e2fe145e672d1b9faf |
++------+--------------------+----------------------------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from t2 where hash_value=md5(repeat('beijing',2));
++------+----------------+----------------------------------+
+| id   | context        | hash_value                       |
++------+----------------+----------------------------------+
+| 1    | beijingbeijing | 09746eef633dbbccb7997dfd795cff17 |
++------+----------------+----------------------------------+
+1 row in set (0.03 sec)
+
+上面的例子展示了合成索引的用法，由于这种技术只能用于精确匹配，在一定程度上减少了I/O,从而提高了查询效率。如果需要对blob或者clob字段进行模糊查询，mysql提供了前缀索引，也就是只为字段的前n列创建索引。
+ps: 对context前100个字符进行模糊查询，注意"%"不能放前面，否则索引将不会被使用。
+mysql> create index inx_blob on t2(context(100));
+Query OK, 0 rows affected (0.14 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+mysql> desc select * from t2 where context like 'bei%' \G;
+*************************** 1. row ***************************
+           id: 1
+  select_type: SIMPLE
+        table: t2
+         type: range
+possible_keys: inx_blob
+          key: inx_blob
+      key_len: 103
+          ref: NULL
+         rows: 1
+        Extra: Using where
+1 row in set (0.02 sec)
+
+在不必要的时候，避免检索大型的blob和text值，除非能够确定作为约束条件的where子句只会在找到所需要的行。否则，很可能毫无目的地在网络上传输大量的值。
+
+在某些环境中，如果把这些数据列移动到第二张表中，可以把原数据表中的数据列转换为固定长度的数据行格式。这可以减少主表中的碎片，可以得到固定长度数据行的性能优势。它还可以使主数据表在运行select * 查询时不会通过网络传输大量的blob或text值。
+
+
+
+浮点数和定点数
+浮点数类型如果插入的数值精度超出后，则会四舍五入后再插入。
+定点数实际上是以字符串形式存放的，所以定点数可以更精确地保存数据。如果插入的数值大于实际定义的精度，则会警告，在SQLMode下，按四舍五入插入。traditional下，报错无法插入。
+mysql> create table if not exists t3(
+    -> f1 float(8,1),
+    -> f2 float(8,1),
+    -> c1 float(10,2),
+    -> c2 decimal(10,2)
+    -> );
+Query OK, 0 rows affected (0.09 sec)
+
+
+mysql> insert into t3 values(1.23456,1.25456,131072.32,131072.32);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from t3;
++------+------+-----------+-----------+
+| f1   | f2   | c1        | c2        |
++------+------+-----------+-----------+
+|  1.2 |  1.3 | 131072.31 | 131072.32 |
++------+------+-----------+-----------+
+1 row in set (0.00 sec)
+
+如上面例子，c1的值由131072.32变成了131072.31　这是浮点数特有的问题。
+
+在编程中，要注意浮点值误差问题。尽量避免对浮点数进行比较
+货币等对精度敏感的数据，应该用定点数存储。
+
+
+
+
+
+「字符集」
+1.如果数据库只需要支持一般中文，数据量很大，性能要求也很高，那么就应该选择双字节定长编码的中文字符集，比如GBK。因为对于utf-8而言，GBK较“小”，每个字占２个字节，而utf-8汉字占3个字节。（utf-8）编码方式是1到４个字节。
+2. 如果主要是英文字符，仅有少量汉字数据，推荐用utf-8，只占一个字符。
+3.如果数据库需要做大量的字符运算，如比较，排序等，那么选择定长字符集可能更好。
+
+查看所有可用的字符集的命令是mysql> show character set;
+
+每种字符集至少对应一个校对规则，可以通过“show collation like '***';”命令查看。
+mysql> show collation like 'gbk%';
++----------------+---------+----+---------+----------+---------+
+| Collation      | Charset | Id | Default | Compiled | Sortlen |
++----------------+---------+----+---------+----------+---------+
+| gbk_chinese_ci | gbk     | 28 | Yes     | Yes      |       1 |
+| gbk_bin        | gbk     | 87 |         | Yes      |       1 |
++----------------+---------+----+---------+----------+---------+
+2 rows in set (0.03 sec)
+
+gbk_chinese_ci是默认的校对规则，对大小写不敏感。
+gbk_bin按照编码的值进行比较，对大小写敏感。
+
+mysql的字符集和校对规则有４个级别的默认设置：服务器级，数据库级，表级和字段级。它们分别在不同的地方设置，作用也不相同。
